@@ -1,3 +1,9 @@
+libnet-curl-perl (0.33-1adzuna3) lucid; urgency=low
+
+  * Try again harder.
+
+ -- Dave Lambley <dave@adzuna.com>  Wed, 16 Apr 2014 11:32:27 +0000
+
 libnet-curl-perl (0.33-1adzuna2) lucid; urgency=low
 
   * Rely on Debian to resolve version.
