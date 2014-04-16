@@ -2,3 +2,6 @@
 
 %:
 	dh $@
+
+override_dh_auto_install:
+	make pure_install PREFIX=/usr DESTDIR=debian/libnet-curl-perl
