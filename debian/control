@@ -1,0 +1,17 @@
+Source: libnet-curl-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 7), perl (>= 5.8.1)
+Maintainer: Dave Lambley <dave@adzuna.com>
+Standards-Version: 3.8.3
+Homepage: http://search.cpan.org/dist/Net-Curl/
+
+Package: libnet-curl-perl
+Architecture: any
+Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends},
+  perl (>= 5.8.1)
+Description: Perl interface for libcurl
+ Net::Curl::Compat lets you use Net::Curl in applications and modules that
+ normally use WWW::Curl. There are several ways to accomplish it:
+ .
+ This description was automagically extracted from the module by dh-make-perl.
