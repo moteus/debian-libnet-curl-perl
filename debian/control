@@ -1,7 +1,7 @@
 Source: libnet-curl-perl
 Section: perl
 Priority: optional
-Build-Depends: debhelper (>= 7), perl (>= 5.8.1), (libcurl4-gnutls-dev | libcurl4-gnutls-dev)
+Build-Depends: debhelper (>= 7), perl (>= 5.8.1), libcurl4-openssl-dev
 Maintainer: Dave Lambley <dave@adzuna.com>
 Standards-Version: 3.8.3
 Homepage: http://search.cpan.org/dist/Net-Curl/
@@ -9,7 +9,7 @@ Homepage: http://search.cpan.org/dist/Net-Curl/
 Package: libnet-curl-perl
 Architecture: any
 Depends: ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends},
-  perl (>= 5.8.1), (libcurl3 | libcurl3-gnutls)
+  perl (>= 5.8.1), libcurl4
 Description: Perl interface for libcurl
  Net::Curl::Compat lets you use Net::Curl in applications and modules that
  normally use WWW::Curl. There are several ways to accomplish it:
