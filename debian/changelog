@@ -1,3 +1,9 @@
+libnet-curl-perl (0.33-1adzuna5) trusty; urgency=medium
+
+  * Make version local
+
+ -- Dave Lambley <dave@adzuna.com>  Fri, 01 May 2015 11:59:22 +0000
+
 libnet-curl-perl (0.33-1adzuna4) lucid; urgency=low
 
   * Package names from looking at apt database.
