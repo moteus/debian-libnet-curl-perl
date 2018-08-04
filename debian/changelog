@@ -2,7 +2,7 @@ libnet-curl-perl (0.39-amelnichuk1) trusty; urgency=medium
 
   * Update net curl library
 
- -- Alexey Melnichuk <alexeymelnichuck@gmail.com>  Sut, 04 Aug 2018 11:59:22 +0000
+ -- Alexey Melnichuk <alexeymelnichuck@gmail.com>  Sat, 04 Aug 2018 14:58:42 +0000
 
 libnet-curl-perl (0.33-1adzuna5) trusty; urgency=medium
 
