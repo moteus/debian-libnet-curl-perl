@@ -5,7 +5,7 @@ use warnings;
 use Net::Curl ();
 use Exporter 'import';
 
-our $VERSION = 0.33;
+our $VERSION = 0.39;
 
 our @EXPORT_OK = grep { /^CURL/x } keys %{Net::Curl::Easy::};
 our %EXPORT_TAGS = ( constants => \@EXPORT_OK );
@@ -220,6 +220,25 @@ form object.
 
 Use setopt() with CURLOPT_HTTPPOST option to attach the share object.
 
+=item escape( )
+
+URL encodes the given string.
+
+ my $escaped = $easy->escape( "+foo" );
+
+Calls L<curl_easy_escape(3)> which URL encode the given string.
+
+=item unescape( )
+
+URL decodes the given string.
+
+ my $unescaped = $easy->unescape( "%2Bbar" );
+
+Calls L<curl_easy_unescape(3)> which URL decodes the given string.
+
+If you are sure the unescaped data contains a utf8 string, you can mark it
+with utf8::decode( $unescaped )
+
 =back
 
 =head2 FUNCTIONS
@@ -398,6 +417,19 @@ ulnow and CURLOPT_PROGRESSDATA value. It should return 0.
      return 0;
  }
 
+Since CURLOPT_XFERINFODATA is an alias to CURLOPT_PROGRESSDATA,
+they both set the same callback data for both
+CURLOPT_PROGRESSFUNCTION and CURLOPT_PROGRESSFUNCTION callbacks.
+
+=item CURLOPT_XFERINFOFUNCTION ( CURLOPT_XFERINFODATA ) 7.32.0+
+
+Works exactly like CURLOPT_PROGRESSFUNCTION callback, except that dltotal, dlnow, ultotal
+and ulnow are now integer values instead of double.
+
+Since CURLOPT_XFERINFODATA is an alias to CURLOPT_PROGRESSDATA,
+they both set the same callback data for both
+CURLOPT_PROGRESSFUNCTION and CURLOPT_PROGRESSFUNCTION callbacks.
+
 =item CURLOPT_HEADERFUNCTION ( CURLOPT_WRITEHEADER )
 
 Behaviour is the same as in write callback. Callback is called once for
@@ -512,7 +544,7 @@ L<libcurl-errors(3)>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2011 Przemyslaw Iskra <sparky at pld-linux.org>.
+Copyright (c) 2011-2015 Przemyslaw Iskra <sparky at pld-linux.org>.
 
 You may opt to use, copy, modify, merge, publish, distribute and/or sell
 copies of the Software, and permit persons to whom the Software is furnished

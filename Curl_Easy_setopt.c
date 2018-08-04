@@ -1,6 +1,6 @@
-/* vim: ts=4:sw=4:ft=xs:fdm=marker: */
-/*
- * Copyright 2011 (C) Przemyslaw Iskra <sparky at pld-linux.org>
+/* vim: ts=4:sw=4:ft=xs:fdm=marker
+ *
+ * Copyright 2011-2015 (C) Przemyslaw Iskra <sparky at pld-linux.org>
  *
  * Loosely based on code by Cris Bailiff <c.bailiff+curl at devsecure.com>,
  * and subsequent fixes by other contributors.
@@ -48,6 +48,15 @@ perl_curl_easy_setopt_function( pTHX_ perl_curl_easy_t *easy, long option,
 			dataopt = CURLOPT_PROGRESSDATA;
 			cbnum = CB_EASY_PROGRESS;
 			break;
+#ifdef CURLOPT_XFERINFODATA
+# ifdef CURLOPT_XFERINFOFUNCTION
+		case CURLOPT_XFERINFOFUNCTION:
+			funcptr = cb_easy_xferinfo;
+			dataopt = CURLOPT_XFERINFODATA;
+			cbnum = CB_EASY_XFERINFO;
+			break;
+# endif
+#endif
 		case CURLOPT_DEBUGFUNCTION:
 			funcptr = cb_easy_debug;
 			dataopt = CURLOPT_DEBUGDATA;
@@ -185,6 +194,10 @@ perl_curl_easy_setopt_functiondata( pTHX_ perl_curl_easy_t *easy, long option,
 			break;
 		case CURLOPT_PROGRESSDATA:
 			cbnum = CB_EASY_PROGRESS;
+#ifdef CURLOPT_XFERINFODATA
+			/* duplicate data for CB_EASY_XFERINFO since CURLOPT_XFERINFODATA is an alias for CURLOPT_PROGRESSDATA */
+			SvREPLACE( easy->cb[ CB_EASY_XFERINFO ].data, value );
+#endif
 			break;
 		case CURLOPT_DEBUGDATA:
 			cbnum = CB_EASY_DEBUG;

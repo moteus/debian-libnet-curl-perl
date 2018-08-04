@@ -1,6 +1,6 @@
-/* vim: ts=4:sw=4:ft=xs:fdm=marker: */
-/*
- * Copyright 2011 (C) Przemyslaw Iskra <sparky at pld-linux.org>
+/* vim: ts=4:sw=4:ft=xs:fdm=marker
+ *
+ * Copyright 2011-2015 (C) Przemyslaw Iskra <sparky at pld-linux.org>
  *
  * Loosely based on code by Cris Bailiff <c.bailiff+curl at devsecure.com>,
  * and subsequent fixes by other contributors.
@@ -245,6 +245,31 @@ cb_easy_progress( void *userptr, double dltotal, double dlnow,
 
 	return PERL_CURL_CALL( cb, args );
 }
+
+
+#ifdef CURLOPT_XFERINFOFUNCTION
+/* XFERINFOFUNCTION -- XFERINFODATA */
+static int
+cb_easy_xferinfo( void *userptr, curl_off_t dltotal, curl_off_t dlnow,
+		curl_off_t ultotal, curl_off_t ulnow )
+{
+	dTHX;
+
+	perl_curl_easy_t *easy;
+	easy = (perl_curl_easy_t *) userptr;
+	callback_t *cb = &easy->cb[ CB_EASY_XFERINFO ];
+
+	SV *args[] = {
+		SELF2PERL( easy ),
+		newSViv( dltotal ),
+		newSViv( dlnow ),
+		newSViv( ultotal ),
+		newSViv( ulnow )
+	};
+
+	return PERL_CURL_CALL( cb, args );
+}
+#endif
 
 
 /* IOCTLFUNCTION -- IOCTLDATA */
@@ -583,6 +608,9 @@ cb_easy_sshkey( CURL *easy_handle, const struct curl_khkey *knownkey,
 
 #ifdef CALLBACK_TYPECHECK
 static curl_progress_callback t_progress __attribute__((unused)) = cb_easy_progress;
+#ifdef CURLOPT_XFERINFOFUNCTION
+static curl_xferinfo_callback t_xferinfo __attribute__((unused)) = cb_easy_xferinfo;
+#endif
 static curl_write_callback t_write __attribute__((unused)) = cb_easy_write;
 static curl_chunk_bgn_callback t_chunk_bgn __attribute__((unused)) = cb_easy_chunk_bgn;
 static curl_chunk_end_callback t_chunk_end __attribute__((unused)) = cb_easy_chunk_end;

@@ -26,7 +26,7 @@ my $minimum_libcurl_ver = "7.15.5";
 my $constant_names;
 
 # XXX: some compilers may not support those flags
-my $devel_cflags = "-Wall ";
+my $devel_cflags = "-Wall -Wno-unknown-pragmas";
 #$devel_cflags .= "-Werror -DCALLBACK_TYPECHECK " if -d ".git";
 
 if ( $curl{libs} and $curl{version} ) {
@@ -57,7 +57,7 @@ if ( $curl{libs} and $curl{version} ) {
 		};
 		if ( $@ ) {
 			print STDERR "curl-config failed:\n$@\n\n",
-				"libcurl development fils do not seem to be available\n",
+				"libcurl development files do not seem to be available\n",
 				"You must install libcurl $minimum_libcurl_ver or newer to\n",
 				"build this module\n\n";
 			print STDERR "NA: Unable to build distribution on this platform.\n";
@@ -143,13 +143,16 @@ my $bits = (length(pack(p => 0)) < 8)
     : '';
 
 # older perl seems to choke on it, maybe utf8::upgrade would work ?
-my ($l_, $a_) = ($] >= 5.010) ? ("\x{142}", "\x{e1}") : qw(l a);
+my ($l_, $a_, $c_) = ($] >= 5.010)
+    ? ("\x{142}", "\x{e1}", "\x{107}")
+    : qw(l a c);
+
 WriteMakefile(
 	NAME 		=> 'Net::Curl',
 	VERSION_FROM	=> 'lib/Net/Curl.pm',
 	ABSTRACT_FROM	=> 'lib/Net/Curl.pm',
 	AUTHOR		=> "Przemys${l_}aw Iskra <sparky at pld-linux.org>",
-	CCFLAGS		=> $devel_cflags . $curl{cflags} . $bits,
+	CCFLAGS		=> $devel_cflags . ' ' . $curl{cflags} . $bits,
 	LIBS		=> $curl{libs},
 	SIGN		=> 1,
 	LICENSE		=> 'mit',
@@ -168,6 +171,15 @@ WriteMakefile(
 			"Fuji, Goro",
 			"Przemys${l_}aw Iskra",
 			"Stanislaw Pusep",
+			"Olaf Alders",
+			"Maksym Davydov",
+			"Andy Jack",
+			"Ferenc Erki",
+			"Nick Kostyria",
+			"Daniel Ruoso",
+			"H.Merijn Brand",
+			"Yanick Champoux",
+			"Slaven Rezi${c_}",
 		],
 	},
 	MIN_PERL_VERSION => 5.008001,
@@ -221,7 +233,7 @@ sub get_curl_incdir
 	my @incpath = (
 		( defined $curl{incdir} ? $curl{incdir} : () ),
 		( $curl{cflags} =~ /-I(\S+)/g ),
-		( "$curl{prefix}/include" ),
+		( defined $curl{prefix} ? "$curl{prefix}/include" : () ),
 		( split /\s+/, $Config{usrinc} ),
 		( split /\s+/, $Config{locincpth} ),
 		qw(
@@ -253,8 +265,7 @@ sub get_constants_symbols
 	open my $fin, "<", "inc/symbols-in-versions"
 		or die "Cannot open symbols file: $!\n";
 	while ( <$fin> ) {
-		next if /^\s+/;
-		next if /^\s*$/;
+		next if /^[#\s]/;
 		my ( $sym, $in, $dep, $out ) = split /\s+/, $_;
 
 		if ( $out ) {
@@ -299,9 +310,15 @@ sub get_constants_headers
 		open (H, "<", $curl_h)
 			or die "Cannot open $curl_h: ".$!;
 		while(<H>) {
-			if (/^#define (CURL[A-Za-z0-9_]*)/) {
-				$syms{ $1 } = 1;
+			# Skip defines without values like:
+			#	#define CURL_STRICTER
+			if (m{^#\s*define\s+(CURL\w*)\s*$}) {
+				chomp;
+				warn "Skipping '$_': does not define a symbol";
+				next;
 			}
+
+			m{^#\s*define\s+(CURL\w*)} and $syms{$1}++;
 		}
 		close H;
 	}

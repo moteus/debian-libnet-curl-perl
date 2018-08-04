@@ -25,8 +25,7 @@ my @check;
 	open my $fin, "<", "inc/symbols-in-versions"
 	    or die "Cannot open symbols file: $!\n";
 	while ( <$fin> ) {
-		next if /^#\s+/;
-		next if /^\s+/;
+		next if /^[#\s]/;
 		my ( $sym, $in, $dep, $out ) = split /\s+/, $_;
 
 		if ( $in ne "-" ) {
@@ -65,7 +64,7 @@ foreach my $file ( @files ) {
 				$ifdef[ $#ifdef ] = undef;
 			} elsif ( $line =~ /#endif/ ) {
 				pop @ifdef;
-			} elsif ( $line =~ /$sym/ ) {
+			} elsif ( $line =~ /\b$sym\b/ ) {
 				my $notbad = 0;
 				foreach my $d ( grep defined, @ifdef ) {
 					if ( $d eq $sym ) {

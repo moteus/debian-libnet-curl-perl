@@ -1,6 +1,71 @@
 Change log for Net::Curl. See the complete list of changes at:
 https://github.com/sparky/perl-Net-Curl/commits/master
 
+0.39 2017-09-09T19:13:00Z
+ [H.Merijn Brand <h.m.brand@xs4all.nl>]
+ - LIBCURL_TIMESTAMP format changed in header.
+
+ [Slaven Rezić <slaven@rezic.de>]
+ - Compilation fails if $curl_flags is non-empty.
+
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Synced symbols-in-versions from libcurl/7.55.1.
+
+ [Yanick Champoux <Yanick@babyl.ca>]
+ - Wasn't testing all the methods.
+
+0.38 2017-07-26T06:54:00Z
+ [Andy Jack <andyjack@cpan.org>]
+ - Correct number of tests.
+
+ [Ferenc Erki <ferki@cpan.org>]
+ - Fix handling of constants without values.
+
+ [Nick Kostyria <kni@cpan.org>]
+ - Fix perl_curl_multi_delete for GlobalDestruction.
+
+ [Daniel Ruoso <daniel@ruoso.com>]
+ - In t/old-22sendrecv.t, the data may come in more than one read.
+
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Regression fixes & housekeeping;
+ - Synced symbols-in-versions from libcurl/7.54.1.
+
+0.37 2015-02-01T09:25:00Z
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Synced symbols-in-versions from libcurl/7.40.0.
+
+0.36 2014-07-05T12:56:26Z
+ [Przemysław Iskra <sparky@pld-linux.org>]
+ - Fixed the tests for libcurl older than 7.21.2.
+
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Added MANIFEST.SKIP;
+ - Added Devel::Leak v0.04 special case to t/t/96-leak.t;
+ - Updated release tests.
+
+0.35 2014-06-03T08:54:00Z
+ [Przemysław Iskra <sparky@pld-linux.org>]
+ - Properly handle both UTF-8 and binary data within /(un)?escape/.
+
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Fixed the bugs introduced with the pipelining blacklist feature.
+
+0.34 2014-05-30T15:40:00Z
+ [Maksym Davydov <max@mdavydov.com>]
+ - Added support for CURLOPT_XFERINFOFUNCTION callback (and CURLOPT_XFERINFODATA option) to Net::Curl::Easy;
+ - Added functions escape() and unescape() to Net::Curl::Easy.
+
+ [Olaf Alders <olaf@wundersolutions.com>]
+ - Fixed typo in Makefile.PL error message.
+
+ [Stanislaw Pusep <stas@sysd.org>]
+ - Synced symbols-in-versions from libcurl/7.37.0;
+ - Makefile.PL cleanup;
+ - Attempted to silence test noise under -DDEBUGGING;
+ - Attept to fix a test failing on MidnightBSD (and potentially others);
+ - CURLMOPT_PIPELINING_SERVER_BL/CURLMOPT_PIPELINING_SITE_BL support added.
+
 0.33 2014-01-17T10:38:11Z
  [Stanislaw Pusep <stas@sysd.org>]
  - Fixed Net-Curl test failures on FreeBSD 9.2 (cookies related);
